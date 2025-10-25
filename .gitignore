@@ -1,0 +1,31 @@
+# CMake 生成的构建文件
+build/
+cmake-build-*/
+
+# 编译产物
+*.exe
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+*.o
+*.obj
+
+# IDE 配置文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.others/
+# Windows 系统文件
+Thumbs.db
+Desktop.ini
+
+# 测试产物
+test_db/
+
+# 第三方库的构建产物（保留源代码）
+third_party/**/build/
+third_party/**/.git/
