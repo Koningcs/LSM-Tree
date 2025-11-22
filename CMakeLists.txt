@@ -74,6 +74,9 @@ if(TEST_SOURCES)
 
     if(LSM_SOURCES)
         target_link_libraries(lsm_tree_test lsm_tree_lib)
+        if(MINGW)
+            target_link_libraries(lsm_tree_test stdc++fs)
+        endif()
     endif()
 
     # 添加到 CTest

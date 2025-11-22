@@ -12,6 +12,17 @@ LSMTree::LSMTree(const std::string& db_path)
     // 1. 创建数据库目录
     // 2. 加载已有的 SSTable 文件
     // 3. 恢复 WAL 日志
+
+    wal_ = std::make_unique<WAL>(db_path_);
+    
+    wal_->Recover([this](const std::string& key, const std::string& value, bool is_delete) {
+        if (is_delete) {
+            memtable_[key] = std::nullopt;
+        } else {
+            memtable_[key] = value;
+        }
+    });
+
     std::cout << "[LSMTree] init database, PATH: " << db_path_ << std::endl;
 }
 
@@ -38,6 +49,7 @@ void LSMTree::Put(const std::string& key, const std::string& value) {
 
     std::cout << "[LSMTree] Put: " << key << " = " << value << std::endl;
 
+    wal_->AppendPut(key, value);
     // TODO（后续实现）：
     // 1. 先写 WAL 日志
     // 2. 检查 MemTable 大小
@@ -88,7 +100,9 @@ void LSMTree::Delete(const std::string& key) {
 
     std::cout << "[LSMTree] Delete: " << key << std::endl;
 
+    wal_->AppendDelete(key);
     // TODO（后续实现）：
     // 1. 先写 WAL 日志
     // 2. 墓碑标记在 Compaction 时才真正删除数据
+}
 }

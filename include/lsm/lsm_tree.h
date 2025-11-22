@@ -3,6 +3,8 @@
 #include <string>
 #include <optional>
 #include <map>
+#include <memory>
+#include "lsm/wal.h"
 
 namespace lsm {
 
@@ -64,6 +66,9 @@ private:
      * - 这样可以区分"不存在"和"被删除"
      */
     std::map<std::string, std::optional<std::string>> memtable_;
+
+    // Write-Ahead Log
+    std::unique_ptr<WAL> wal_;
 };
 
 } // namespace lsm
